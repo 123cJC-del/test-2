@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Visite IA – Démo</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#fff; --ink:#0f172a; --muted:#6b7280; --line:#e5e7eb;
+    --brand:#3b82f6; --brand-2:#2563eb; --chip:#eef2ff;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+  .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.06);overflow:hidden}
+  .head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .body{display:grid;grid-template-columns:2fr 1fr}
+  @media (max-width:960px){ .body{grid-template-columns:1fr} }
+  /* Viewer */
+  .viewer{position:relative;min-height:430px;background:#e6ecf3}
+  .viewer img{width:100%;height:100%;object-fit:cover;display:block}
+  .hotspot{position:absolute;padding:6px 10px;border-radius:999px;background:var(--chip);color:#374151;font-size:13px;
+           display:flex;align-items:center;gap:6px;border:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .hotspot i{width:18px;height:18px;border-radius:999px;background:#dbeafe;display:inline-block}
+  .controls{position:absolute;left:16px;bottom:16px;display:flex;gap:10px;align-items:center}
+  .pill{background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border:1px solid var(--line);padding:8px 10px;border-radius:12px}
+  .tabs{display:flex;gap:8px}
+  .tab{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;cursor:pointer}
+  .tab.active{background:var(--brand);border-color:var(--brand);color:#fff}
+  .narrBar{position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);padding:10px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  .narrText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#111827}
+  /* Avatar */
+  .avatar{position:absolute;right:12px;bottom:12px;width:90px;height:90px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .avatar svg{width:70px;height:70px}
+  .mouth{transform-origin:center;transition:transform .06s;transform:scaleY(0.2)}
+  .talking .mouth{transform:scaleY(1)}
+  /* Side / Chat */
+  .side{border-left:1px solid var(--line);background:#fafafa;display:flex;flex-direction:column;min-height:430px}
+  .sideHead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:600}
+  .chat{flex:1;overflow:auto;padding:12px 12px 0}
+  .msg{max-width:92%;padding:10px 12px;border-radius:12px;margin:6px 0;line-height:1.35;font-size:15px}
+  .me{margin-left:auto;background:#dbeafe}
+  .bot{background:#fff;border:1px solid var(--line)}
+  .chatFoot{padding:12px;border-top:1px solid var(--line);display:flex;gap:8px}
+  .chatFoot input{flex:1;padding:10px 12px;border-radius:12px;border:1px solid #d1d5db;font-size:15px}
+  .btn{padding:10px 14px;border-radius:12px;border:0;background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
+  .lead{padding:12px;border-top:1px dashed var(--line)}
+  .lead .cta{width:100%;padding:10px 14px;border-radius:10px;border:0;background:var(--brand-2);color:#fff;font-weight:700;cursor:pointer}
+  /* Modal (soft-gate) */
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;padding:16px}
+  .modal.on{display:flex}
+  .sheet{background:#fff;max-width:420px;width:100%;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden}
+  .sheet .h{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700}
+  .sheet .c{padding:14px 16px;display:grid;gap:10px}
+  .sheet input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db}
+  .sheet .row{display:flex;gap:10px}
+  .sheet .row > *{flex:1}
+  .sheet .actions{padding:14px 16px;border-top:1px solid var(--line);display:flex;gap:10px}
+  .sheet .actions button{flex:1}
+  .small{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="head">
+        <div><strong id="title">3P rénové – 72 m² – Nice</strong></div>
+        <div style="color:#111827;font-weight:700" id="price">520 000 €</div>
+      </div>
+
+      <div class="body">
+        <!-- VIEWER -->
+        <div class="viewer" id="viewer">
+          <img id="roomImage" src="" alt="" />
+          <div class="hotspot" style="left:20px;top:24px"><i></i><span id="hs1">Exposition Sud</span></div>
+          <div class="hotspot" style="left:40%;bottom:30%"><i></i><span id="hs2">Baie vitrée</span></div>
+
+          <div class="controls pill">
+            <div title="Son sur clic sur mobile">🎧</div>
+            <div class="tabs">
+              <button class="tab" data-room="salon">Salon</button>
+              <button class="tab" data-room="cuisine">Cuisine</button>
+              <button class="tab" data-room="chambre">Chambre</button>
+            </div>
+          </div>
+
+          <div class="narrBar">
+            <div id="narrText" class="narrText">—</div>
+          </div>
+
+          <!-- AVATAR -->
+          <div class="avatar" id="avatar">
+            <!-- petit perso SVG simple -->
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="48" fill="#fff" stroke="#e5e7eb" stroke-width="3"/>
+              <circle cx="43" cy="52" r="6" fill="#111"/>
+              <circle cx="77" cy="52" r="6" fill="#111"/>
+              <rect class="mouth" x="42" y="74" width="36" height="8" rx="4" fill="#111"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- CHAT -->
+        <div class="side">
+          <div class="sideHead">
+            <span>Assistant IA</span>
+            <button id="openChat" class="btn" style="padding:8px 12px;">Ouvrir</button>
+          </div>
+          <div id="chat" class="chat" aria-live="polite"></div>
+          <div class="chatFoot">
+            <input id="question" placeholder="Pose ta question… (charges, DPE, copro…)" />
+            <button id="send" class="btn">Envoyer</button>
+          </div>
+          <div class="lead">
+            <button id="ctaLead" class="cta">Être rappelé</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOFT-GATE (modal email) -->
+  <div class="modal" id="gate">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+      <div class="h" id="gateTitle">🎟️ Continue la visite & pose tes questions</div>
+      <div class="c">
+        <div class="small">Tu recevras le récap par email.</div>
+        <input id="leadEmail" type="email" placeholder="Email (obligatoire)" required />
+        <div class="row">
+          <input id="leadFirst" type="text" placeholder="Prénom" />
+          <input id="leadPhone" type="tel" placeholder="Téléphone (facultatif)" />
+        </div>
+        <label class="small"><input id="consent" type="checkbox" /> J’accepte d’être recontacté au sujet de ce bien.</label>
+      </div>
+      <div class="actions">
+        <button id="gateGo" class="btn" disabled>Continuer</button>
+        <button id="gateSkip" class="btn" style="background:#e5e7eb;color:#111;">Plus tard</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===================== 1) DONNÉES DU BIEN ===================== */
+const DATA = {
+  titre: "3P rénové – 72 m² – Nice",
+  prix: 520000,
+  hotspots: ["Exposition Sud", "Baie vitrée"],
+  charges_mensuelles: 150,
+  dpe: "C",
+  copro: "Aucune procédure connue",
+  surface_totale: 72,
+  rooms: {
+    salon: {
+      titre: "Salon",
+      image: "https://images.unsplash.com/photo-1505692952047-1a78307da8f3?q=80&w=1200&auto=format&fit=crop",
+      narration:
+        "Bienvenue 👋 Ici, le salon de 22,5 m², exposé Sud. La baie vitrée de 3 m apporte une belle lumière toute la journée. Parquet rénové en 2023, clim pour le confort été/hiver. Je peux vous donner les charges ou le DPE.",
+    },
+    cuisine: {
+      titre: "Cuisine",
+      image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1200&auto=format&fit=crop",
+      narration:
+        "Voici la cuisine semi-ouverte de 9,8 m², électroménager inclus et rangements. On reste connecté à la pièce de vie. Voulez-vous la liste des équipements ou le plan exact ?",
+    },
+    chambre: {
+      titre: "Chambre",
+      image: "https://images.unsplash.com/photo-1505691723518-36a5ac3b2a59?q=80&w=1200&auto=format&fit=crop",
+      narration:
+        "La chambre principale fait 12,4 m², au calme sur cour, avec placard intégré. On peut envisager un coin bureau. Besoin d'infos sur l'isolation ou la copro ?",
+    }
+  }
+};
+
+/* ===================== 2) ÉTAT + RÈGLES ===================== */
+let activeRoom = "salon";
+let lastPlayedAt = {};                // { roomId: timestamp }
+const COOLDOWN_MS = 25000;            // éviter relance immédiate
+let gateShown = false;                // affiché une fois
+let talkingTimer = null;              // animation bouche
+const avatarEl   = document.getElementById('avatar');
+const roomImageEl= document.getElementById('roomImage');
+const narrTextEl = document.getElementById('narrText');
+const chatEl     = document.getElementById('chat');
+
+/* ===================== 3) INIT UI ===================== */
+document.getElementById('title').textContent = DATA.titre;
+document.getElementById('price').textContent = DATA.prix.toLocaleString('fr-FR') + " €";
+document.getElementById('hs1').textContent = DATA.hotspots[0] || "";
+document.getElementById('hs2').textContent = DATA.hotspots[1] || "";
+
+// tabs
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click', ()=> enterRoom(btn.dataset.room));
+});
+
+// chat open triggers soft-gate (une fois)
+document.getElementById('openChat').addEventListener('click', ()=>{
+  if (!gateShown && !localStorage.getItem('lead_email')) openGate();
+});
+
+// send question
+document.getElementById('send').addEventListener('click', onSend);
+document.getElementById('question').addEventListener('keydown',(e)=>{
+  if(e.key==='Enter') onSend();
+});
+
+// CTA lead
+document.getElementById('ctaLead').addEventListener('click', openGate);
+
+// gate handlers
+const gateEl = document.getElementById('gate');
+const gateGo = document.getElementById('gateGo');
+document.getElementById('gateSkip').addEventListener('click', ()=> { gateEl.classList.remove('on'); });
+document.getElementById('leadEmail').addEventListener('input', ()=> validateGate());
+document.getElementById('consent').addEventListener('change', ()=> validateGate());
+gateGo.addEventListener('click', ()=>{
+  const email = document.getElementById('leadEmail').value.trim();
+  const first = document.getElementById('leadFirst').value.trim();
+  const phone = document.getElementById('leadPhone').value.trim();
+  // simulate send → stocke localement et log (tu remplaceras par webhook/CRM)
+  localStorage.setItem('lead_email', email);
+  localStorage.setItem('lead_first', first);
+  localStorage.setItem('lead_phone', phone);
+  console.log("LEAD:", {email, first, phone, property: DATA.titre});
+  gateEl.classList.remove('on');
+  gateShown = true;
+  appendMsg("Merci ! Tu peux continuer la visite et poser tes questions. (Nous t'enverrons le récap par email.)", 'bot');
+});
+
+// lancement
+enterRoom('salon');
+
+/* ===================== 4) FONCTIONS ===================== */
+function validateGate(){
+  const ok = document.getElementById('leadEmail').value.includes('@')
+          && document.getElementById('consent').checked;
+  gateGo.disabled = !ok;
+}
+
+function openGate(){
+  gateEl.classList.add('on');
+  validateGate();
+}
+
+function appendMsg(text, who='bot'){
+  const div = document.createElement('div');
+  div.className = `msg ${who==='me'?'me':'bot'}`;
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function startTalking(){
+  avatarEl.classList.add('talking');
+  // sécurité: stop après 30s max
+  clearTimeout(talkingTimer);
+  talkingTimer = setTimeout(stopTalking, 30000);
+}
+function stopTalking(){
+  avatarEl.classList.remove('talking');
+  clearTimeout(talkingTimer);
+  talkingTimer = null;
+}
+
+function speak(text){
+  try{
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'fr-FR';
+    u.onstart = startTalking;
+    u.onend = stopTalking;
+    // stoppe ce qui parlait
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }catch(e){
+    // si TTS non dispo, on garde juste le transcript
+  }
+}
+
+function enterRoom(roomId){
+  if(!DATA.rooms[roomId]) return;
+  const now = Date.now();
+  if(activeRoom===roomId && now - (lastPlayedAt[roomId]||0) < COOLDOWN_MS){
+    return; // évite relance si on se "recentre"
+  }
+  activeRoom = roomId;
+  // UI
+  document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.room===roomId));
+  roomImageEl.src = DATA.rooms[roomId].image;
+  narrTextEl.textContent = DATA.rooms[roomId].narration;
+
+  // Transcript + voix
+  appendMsg(DATA.rooms[roomId].narration, 'bot');
+  speak(DATA.rooms[roomId].narration);
+
+  lastPlayedAt[roomId] = now;
+
+  // soft-gate : après le premier "wow" si pas encore montré
+  if(!gateShown && !localStorage.getItem('lead_email')){
+    // affiche après ~8 secondes de lecture ou à l'ouverture du chat
+    setTimeout(()=>{ if(!gateShown) openGate(); }, 8000);
+  }
+}
+
+function onSend(){
+  const input = document.getElementById('question');
+  const q = input.value.trim();
+  if(!q) return;
+  // pause narration
+  speechSynthesis.cancel(); stopTalking();
+
+  appendMsg(q, 'me');
+  const reply = answerFromData(q);
+  appendMsg(reply, 'bot');
+  // on lit la réponse (tu peux désactiver si tu préfères)
+  speak(reply);
+  input.value='';
+}
+
+// Réponses depuis nos données (pas d'invention)
+function answerFromData(q){
+  const s = q.toLowerCase();
+  if(s.includes('charge')) return `Charges mensuelles : ${DATA.charges_mensuelles} €`;
+  if(s.includes('dpe')) return `DPE : ${DATA.dpe}`;
+  if(s.includes('prix') || s.includes('coût') || s.includes('cout')) return `Prix demandé : ${DATA.prix.toLocaleString('fr-FR')} €`;
+  if(s.includes('surface')) return `Surface totale : ${DATA.surface_totale} m²`;
+  if(s.includes('copro')) return `Copropriété : ${DATA.copro}`;
+  // fallback sûr
+  return `Information non disponible ici. Je peux demander à un conseiller de vous rappeler si vous voulez.`;
+}
+</script>
+</body>
+</html>
