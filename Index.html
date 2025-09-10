@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;html lang="fr"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="utf-8" /&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1" /&gt;</p>
+<p class="p1">&lt;title&gt;Visite IA – Démo&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg:#f6f7fb; --card:#fff; --ink:#0f172a; --muted:#6b7280; --line:#e5e7eb;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--brand:#3b82f6; --brand-2:#2563eb; --chip:#eef2ff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>*{box-sizing:border-box} html,body{height:100%}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wrap{max-width:1100px;margin:24px auto;padding:0 16px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.06);overflow:hidden}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.body{display:grid;grid-template-columns:2fr 1fr}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (max-width:960px){ .body{grid-template-columns:1fr} }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Viewer */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.viewer{position:relative;min-height:430px;background:#e6ecf3}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.viewer img{width:100%;height:100%;object-fit:cover;display:block}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.hotspot{position:absolute;padding:6px 10px;border-radius:999px;background:var(--chip);color:#374151;font-size:13px;</p>
+<p class="p1"><span class="Apple-converted-space">           </span>display:flex;align-items:center;gap:6px;border:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.03)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.hotspot i{width:18px;height:18px;border-radius:999px;background:#dbeafe;display:inline-block}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.controls{position:absolute;left:16px;bottom:16px;display:flex;gap:10px;align-items:center}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pill{background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border:1px solid var(--line);padding:8px 10px;border-radius:12px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tabs{display:flex;gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tab{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tab.active{background:var(--brand);border-color:var(--brand);color:#fff}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.narrBar{position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);padding:10px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.narrText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#111827}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Avatar */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.avatar{position:absolute;right:12px;bottom:12px;width:90px;height:90px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.08)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.avatar svg{width:70px;height:70px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.mouth{transform-origin:center;transition:transform .06s;transform:scaleY(0.2)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.talking .mouth{transform:scaleY(1)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Side / Chat */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.side{border-left:1px solid var(--line);background:#fafafa;display:flex;flex-direction:column;min-height:430px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sideHead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:600}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chat{flex:1;overflow:auto;padding:12px 12px 0}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.msg{max-width:92%;padding:10px 12px;border-radius:12px;margin:6px 0;line-height:1.35;font-size:15px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.me{margin-left:auto;background:#dbeafe}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.bot{background:#fff;border:1px solid var(--line)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chatFoot{padding:12px;border-top:1px solid var(--line);display:flex;gap:8px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chatFoot input{flex:1;padding:10px 12px;border-radius:12px;border:1px solid #d1d5db;font-size:15px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn{padding:10px 14px;border-radius:12px;border:0;background:var(--brand);color:#fff;font-weight:600;cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.lead{padding:12px;border-top:1px dashed var(--line)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.lead .cta{width:100%;padding:10px 14px;border-radius:10px;border:0;background:var(--brand-2);color:#fff;font-weight:700;cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Modal (soft-gate) */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.modal{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;padding:16px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.modal.on{display:flex}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet{background:#fff;max-width:420px;width:100%;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .h{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .c{padding:14px 16px;display:grid;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .row{display:flex;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .row &gt; *{flex:1}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .actions{padding:14px 16px;border-top:1px solid var(--line);display:flex;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sheet .actions button{flex:1}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.small{color:var(--muted);font-size:12px}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="head"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong id="title"&gt;3P rénové – 72 m² – Nice&lt;/strong&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="color:#111827;font-weight:700" id="price"&gt;520 000 €&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="body"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- VIEWER --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="viewer" id="viewer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;img id="roomImage" src="" alt="" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="hotspot" style="left:20px;top:24px"&gt;&lt;i&gt;&lt;/i&gt;&lt;span id="hs1"&gt;Exposition Sud&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="hotspot" style="left:40%;bottom:30%"&gt;&lt;i&gt;&lt;/i&gt;&lt;span id="hs2"&gt;Baie vitrée&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="controls pill"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div title="Son sur clic sur mobile"&gt;🎧&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tabs"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="tab" data-room="salon"&gt;Salon&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="tab" data-room="cuisine"&gt;Cuisine&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="tab" data-room="chambre"&gt;Chambre&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="narrBar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="narrText" class="narrText"&gt;—&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;!-- AVATAR --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="avatar" id="avatar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- petit perso SVG simple --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg viewBox="0 0 120 120" aria-hidden="true"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;circle cx="60" cy="60" r="48" fill="#fff" stroke="#e5e7eb" stroke-width="3"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;circle cx="43" cy="52" r="6" fill="#111"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;circle cx="77" cy="52" r="6" fill="#111"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;rect class="mouth" x="42" y="74" width="36" height="8" rx="4" fill="#111"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- CHAT --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="side"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="sideHead"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span&gt;Assistant IA&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="openChat" class="btn" style="padding:8px 12px;"&gt;Ouvrir&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="chat" class="chat" aria-live="polite"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="chatFoot"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input id="question" placeholder="Pose ta question… (charges, DPE, copro…)" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="send" class="btn"&gt;Envoyer&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="lead"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="ctaLead" class="cta"&gt;Être rappelé&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SOFT-GATE (modal email) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal" id="gate"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sheet" role="dialog" aria-modal="true" aria-labelledby="gateTitle"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="h" id="gateTitle"&gt;🎟️ Continue la visite &amp; pose tes questions&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="c"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="small"&gt;Tu recevras le récap par email.&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input id="leadEmail" type="email" placeholder="Email (obligatoire)" required /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;input id="leadFirst" type="text" placeholder="Prénom" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;input id="leadPhone" type="tel" placeholder="Téléphone (facultatif)" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label class="small"&gt;&lt;input id="consent" type="checkbox" /&gt; J’accepte d’être recontacté au sujet de ce bien.&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="gateGo" class="btn" disabled&gt;Continuer&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="gateSkip" class="btn" style="background:#e5e7eb;color:#111;"&gt;Plus tard&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">/* ===================== 1) DONNÉES DU BIEN ===================== */</p>
+<p class="p1">const DATA = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>titre: "3P rénové – 72 m² – Nice",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>prix: 520000,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>hotspots: ["Exposition Sud", "Baie vitrée"],</p>
+<p class="p1"><span class="Apple-converted-space">  </span>charges_mensuelles: 150,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dpe: "C",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>copro: "Aucune procédure connue",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>surface_totale: 72,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rooms: {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>salon: {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>titre: "Salon",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>image: "https://images.unsplash.com/photo-1505692952047-1a78307da8f3?q=80&amp;w=1200&amp;auto=format&amp;fit=crop",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>narration:</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"Bienvenue 👋 Ici, le salon de 22,5 m², exposé Sud. La baie vitrée de 3 m apporte une belle lumière toute la journée. Parquet rénové en 2023, clim pour le confort été/hiver. Je peux vous donner les charges ou le DPE.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>cuisine: {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>titre: "Cuisine",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&amp;w=1200&amp;auto=format&amp;fit=crop",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>narration:</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"Voici la cuisine semi-ouverte de 9,8 m², électroménager inclus et rangements. On reste connecté à la pièce de vie. Voulez-vous la liste des équipements ou le plan exact ?",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>chambre: {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>titre: "Chambre",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>image: "https://images.unsplash.com/photo-1505691723518-36a5ac3b2a59?q=80&amp;w=1200&amp;auto=format&amp;fit=crop",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>narration:</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"La chambre principale fait 12,4 m², au calme sur cour, avec placard intégré. On peut envisager un coin bureau. Besoin d'infos sur l'isolation ou la copro ?",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">/* ===================== 2) ÉTAT + RÈGLES ===================== */</p>
+<p class="p1">let activeRoom = "salon";</p>
+<p class="p1">let lastPlayedAt = {};<span class="Apple-converted-space">                </span>// { roomId: timestamp }</p>
+<p class="p1">const COOLDOWN_MS = 25000;<span class="Apple-converted-space">            </span>// éviter relance immédiate</p>
+<p class="p1">let gateShown = false;<span class="Apple-converted-space">                </span>// affiché une fois</p>
+<p class="p1">let talkingTimer = null;<span class="Apple-converted-space">              </span>// animation bouche</p>
+<p class="p1">const avatarEl <span class="Apple-converted-space">  </span>= document.getElementById('avatar');</p>
+<p class="p1">const roomImageEl= document.getElementById('roomImage');</p>
+<p class="p1">const narrTextEl = document.getElementById('narrText');</p>
+<p class="p1">const chatEl <span class="Apple-converted-space">    </span>= document.getElementById('chat');</p>
+<p class="p2"><br></p>
+<p class="p1">/* ===================== 3) INIT UI ===================== */</p>
+<p class="p1">document.getElementById('title').textContent = DATA.titre;</p>
+<p class="p1">document.getElementById('price').textContent = DATA.prix.toLocaleString('fr-FR') + " €";</p>
+<p class="p1">document.getElementById('hs1').textContent = DATA.hotspots[0] || "";</p>
+<p class="p1">document.getElementById('hs2').textContent = DATA.hotspots[1] || "";</p>
+<p class="p2"><br></p>
+<p class="p1">// tabs</p>
+<p class="p1">document.querySelectorAll('.tab').forEach(btn=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>btn.addEventListener('click', ()=&gt; enterRoom(btn.dataset.room));</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">// chat open triggers soft-gate (une fois)</p>
+<p class="p1">document.getElementById('openChat').addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!gateShown &amp;&amp; !localStorage.getItem('lead_email')) openGate();</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">// send question</p>
+<p class="p1">document.getElementById('send').addEventListener('click', onSend);</p>
+<p class="p1">document.getElementById('question').addEventListener('keydown',(e)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(e.key==='Enter') onSend();</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">// CTA lead</p>
+<p class="p1">document.getElementById('ctaLead').addEventListener('click', openGate);</p>
+<p class="p2"><br></p>
+<p class="p1">// gate handlers</p>
+<p class="p1">const gateEl = document.getElementById('gate');</p>
+<p class="p1">const gateGo = document.getElementById('gateGo');</p>
+<p class="p1">document.getElementById('gateSkip').addEventListener('click', ()=&gt; { gateEl.classList.remove('on'); });</p>
+<p class="p1">document.getElementById('leadEmail').addEventListener('input', ()=&gt; validateGate());</p>
+<p class="p1">document.getElementById('consent').addEventListener('change', ()=&gt; validateGate());</p>
+<p class="p1">gateGo.addEventListener('click', ()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const email = document.getElementById('leadEmail').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const first = document.getElementById('leadFirst').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const phone = document.getElementById('leadPhone').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// simulate send → stocke localement et log (tu remplaceras par webhook/CRM)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>localStorage.setItem('lead_email', email);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>localStorage.setItem('lead_first', first);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>localStorage.setItem('lead_phone', phone);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>console.log("LEAD:", {email, first, phone, property: DATA.titre});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gateEl.classList.remove('on');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gateShown = true;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>appendMsg("Merci ! Tu peux continuer la visite et poser tes questions. (Nous t'enverrons le récap par email.)", 'bot');</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">// lancement</p>
+<p class="p1">enterRoom('salon');</p>
+<p class="p2"><br></p>
+<p class="p1">/* ===================== 4) FONCTIONS ===================== */</p>
+<p class="p1">function validateGate(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ok = document.getElementById('leadEmail').value.includes('@')</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&amp;&amp; document.getElementById('consent').checked;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gateGo.disabled = !ok;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function openGate(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gateEl.classList.add('on');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>validateGate();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function appendMsg(text, who='bot'){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const div = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>div.className = `msg ${who==='me'?'me':'bot'}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>div.textContent = text;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>chatEl.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>chatEl.scrollTop = chatEl.scrollHeight;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function startTalking(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>avatarEl.classList.add('talking');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// sécurité: stop après 30s max</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearTimeout(talkingTimer);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>talkingTimer = setTimeout(stopTalking, 30000);</p>
+<p class="p1">}</p>
+<p class="p1">function stopTalking(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>avatarEl.classList.remove('talking');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearTimeout(talkingTimer);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>talkingTimer = null;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function speak(text){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const u = new SpeechSynthesisUtterance(text);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>u.lang = 'fr-FR';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>u.onstart = startTalking;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>u.onend = stopTalking;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// stoppe ce qui parlait</p>
+<p class="p1"><span class="Apple-converted-space">    </span>speechSynthesis.cancel();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>speechSynthesis.speak(u);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}catch(e){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// si TTS non dispo, on garde juste le transcript</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function enterRoom(roomId){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!DATA.rooms[roomId]) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const now = Date.now();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(activeRoom===roomId &amp;&amp; now - (lastPlayedAt[roomId]||0) &lt; COOLDOWN_MS){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return; // évite relance si on se "recentre"</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>activeRoom = roomId;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// UI</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.tab').forEach(t=&gt; t.classList.toggle('active', t.dataset.room===roomId));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>roomImageEl.src = DATA.rooms[roomId].image;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>narrTextEl.textContent = DATA.rooms[roomId].narration;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Transcript + voix</p>
+<p class="p1"><span class="Apple-converted-space">  </span>appendMsg(DATA.rooms[roomId].narration, 'bot');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>speak(DATA.rooms[roomId].narration);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>lastPlayedAt[roomId] = now;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// soft-gate : après le premier "wow" si pas encore montré</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!gateShown &amp;&amp; !localStorage.getItem('lead_email')){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// affiche après ~8 secondes de lecture ou à l'ouverture du chat</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(()=&gt;{ if(!gateShown) openGate(); }, 8000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function onSend(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const input = document.getElementById('question');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const q = input.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!q) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// pause narration</p>
+<p class="p1"><span class="Apple-converted-space">  </span>speechSynthesis.cancel(); stopTalking();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>appendMsg(q, 'me');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const reply = answerFromData(q);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>appendMsg(reply, 'bot');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// on lit la réponse (tu peux désactiver si tu préfères)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>speak(reply);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input.value='';</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Réponses depuis nos données (pas d'invention)</p>
+<p class="p1">function answerFromData(q){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = q.toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s.includes('charge')) return `Charges mensuelles : ${DATA.charges_mensuelles} €`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s.includes('dpe')) return `DPE : ${DATA.dpe}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s.includes('prix') || s.includes('coût') || s.includes('cout')) return `Prix demandé : ${DATA.prix.toLocaleString('fr-FR')} €`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s.includes('surface')) return `Surface totale : ${DATA.surface_totale} m²`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s.includes('copro')) return `Copropriété : ${DATA.copro}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// fallback sûr</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return `Information non disponible ici. Je peux demander à un conseiller de vous rappeler si vous voulez.`;</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
