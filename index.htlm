@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Pages</title>
+<h1 style="font-family:system-ui;margin:20vh 0 0;text-align:center;">✅ GitHub Pages fonctionne</h1>
+<p style="text-align:center;font-family:system-ui">Si tu vois ce texte, l’hébergement est OK.</p>
